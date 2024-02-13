@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">FootballPlayersApp</string>
+    <string name="add_player_activity_title">Add Player</string>
+    <string name="choose_position">Choose Position</string>
+    <string-array name="positions">
+        <item>Goalkeeper</item>
+        <item>Defender</item>
+        <item>Midfielder</item>
+        <item>Forward</item>
+    </string-array>
+
+</resources>

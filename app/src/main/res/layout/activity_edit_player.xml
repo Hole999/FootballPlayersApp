@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <EditText
+            android:id="@+id/editTextPlayerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name and Surname" />
+
+        <EditText
+            android:id="@+id/editTextPlayerClub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Club"
+            android:layout_marginTop="16dp" />
+
+        <Spinner
+            android:id="@+id/spinnerPosition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:entries="@array/positions"
+            android:prompt="@string/choose_position" />
+
+        <ImageView
+            android:id="@+id/imageViewPlayer"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/button_change_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Image"
+            android:layout_marginTop="16dp" />
+
+
+        <Button
+            android:id="@+id/button_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/button_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>
