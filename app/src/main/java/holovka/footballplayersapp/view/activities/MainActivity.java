@@ -1,4 +1,4 @@
-package holovka.footballplayersapp;
+package holovka.footballplayersapp.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,11 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+
+import holovka.footballplayersapp.view.adapters.PlayerAdapter;
+import holovka.footballplayersapp.viewmodel.FootballPlayerViewModel;
+import holovka.footballplayersapp.R;
+import holovka.footballplayersapp.model.entities.FootballPlayer;
 
 public class MainActivity extends AppCompatActivity {
 

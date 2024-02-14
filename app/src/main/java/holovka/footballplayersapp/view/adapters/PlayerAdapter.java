@@ -1,4 +1,4 @@
-package holovka.footballplayersapp;
+package holovka.footballplayersapp.view.adapters;
 
 import android.content.Context;
 import android.net.Uri;
@@ -12,6 +12,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
+
+import holovka.footballplayersapp.R;
+import holovka.footballplayersapp.model.entities.FootballPlayer;
 
 public class PlayerAdapter extends ArrayAdapter<FootballPlayer> {
     public PlayerAdapter(Context context, List<FootballPlayer> players) {

@@ -1,4 +1,4 @@
-package holovka.footballplayersapp;
+package holovka.footballplayersapp.model.database;
 
 
 import androidx.lifecycle.LiveData;
@@ -8,6 +8,8 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 import java.util.List;
+
+import holovka.footballplayersapp.model.entities.FootballPlayer;
 
 @Dao
 public interface FootballPlayerDao {

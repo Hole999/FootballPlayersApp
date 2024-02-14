@@ -1,4 +1,4 @@
-package holovka.footballplayersapp;
+package holovka.footballplayersapp.model.entities;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

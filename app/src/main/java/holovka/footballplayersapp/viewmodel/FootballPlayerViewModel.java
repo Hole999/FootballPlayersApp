@@ -1,4 +1,4 @@
-package holovka.footballplayersapp;
+package holovka.footballplayersapp.viewmodel;
 
 
 import android.app.Application;
@@ -7,6 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import java.util.List;
+
+import holovka.footballplayersapp.model.entities.FootballPlayer;
+import holovka.footballplayersapp.repository.Repository;
 
 public class FootballPlayerViewModel extends AndroidViewModel {
 

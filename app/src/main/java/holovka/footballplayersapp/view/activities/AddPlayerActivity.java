@@ -1,4 +1,4 @@
-package holovka.footballplayersapp;
+package holovka.footballplayersapp.view.activities;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -23,6 +23,10 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import java.util.Calendar;
+
+import holovka.footballplayersapp.viewmodel.FootballPlayerViewModel;
+import holovka.footballplayersapp.R;
+import holovka.footballplayersapp.model.entities.FootballPlayer;
 
 public class AddPlayerActivity extends AppCompatActivity {
 
