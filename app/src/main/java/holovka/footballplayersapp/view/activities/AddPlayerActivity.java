@@ -39,7 +39,7 @@ public class AddPlayerActivity extends AppCompatActivity {
 
     private Spinner spinnerPosition;
     private Button buttonSelectDate;
-    private String selectedDate = "";
+    private String selectedDate = null;
 
 
     private static final int PERMISSION_REQUEST_STORAGE = 2;
@@ -152,8 +152,8 @@ public class AddPlayerActivity extends AppCompatActivity {
         String club = editTextClub.getText().toString().trim();
         String position = spinnerPosition.getSelectedItem().toString().trim();
 
-        if (name.isEmpty() || club.isEmpty() || imageUriString.isEmpty()) {
-            Toast.makeText(this, "All fields are required.", Toast.LENGTH_SHORT).show();
+        if (name.isEmpty() || club.isEmpty() || imageUriString.isEmpty() || selectedDate == null || selectedDate.equals("Select Join Date")) {
+            Toast.makeText(this, "All fields are required, and date must be selected.", Toast.LENGTH_SHORT).show();
             return;
         }
 
