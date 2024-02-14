@@ -1,8 +1,13 @@
 package holovka.footballplayersapp.view.activities;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,16 +19,17 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.bumptech.glide.Glide;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-
-import holovka.footballplayersapp.viewmodel.FootballPlayerViewModel;
 import holovka.footballplayersapp.R;
 import holovka.footballplayersapp.model.entities.FootballPlayer;
+import holovka.footballplayersapp.viewmodel.FootballPlayerViewModel;
 
 public class EditPlayerActivity extends AppCompatActivity {
 
@@ -34,6 +40,8 @@ public class EditPlayerActivity extends AppCompatActivity {
     private FootballPlayerViewModel viewModel;
     private FootballPlayer currentPlayer;
     private ActivityResultLauncher<String> pickImageLauncher;
+
+    private static final int REQUEST_IMAGE_CAPTURE = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +93,7 @@ public class EditPlayerActivity extends AppCompatActivity {
     }
 
     private void setupButtonListeners() {
-        buttonChangeImage.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
+        buttonChangeImage.setOnClickListener(v -> openImageSelectionOptions());
         buttonUpdate.setOnClickListener(v -> updatePlayer());
         buttonDelete.setOnClickListener(v -> deletePlayer());
         buttonSelectDate.setOnClickListener(v -> showDatePickerDialog());
@@ -135,5 +143,80 @@ public class EditPlayerActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openImageSelectionOptions() {
+        CharSequence[] options = new CharSequence[]{"Gallery", "Camera"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Image");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        openGallery();
+                        break;
+                    case 1:
+                        openCameraForImageCapture();
+                        break;
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void openCameraForImageCapture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } else {
+            Toast.makeText(this, "No camera app found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                handleImageCapture(data);
+            }
+        }
+    }
+
+    private void handleImageCapture(Intent data) {
+        if (data != null && data.getExtras() != null) {
+            Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+            if (imageBitmap != null) {
+                Uri imageUri = saveImageToGallery(imageBitmap);
+                if (imageUri != null) {
+                    currentPlayer.image = imageUri.toString();
+                    Glide.with(this).load(imageUri).into(imageViewPlayer);
+                } else {
+                    Toast.makeText(this, "Failed to save the captured image", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Failed to retrieve the captured image", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private Uri saveImageToGallery(Bitmap imageBitmap) {
+        File imageFile = new File(getFilesDir(), "player_image.jpg");
+        try {
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            outputStream.flush();
+            outputStream.close();
+            return Uri.fromFile(imageFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickImageLauncher.launch(String.valueOf(intent));
     }
 }
