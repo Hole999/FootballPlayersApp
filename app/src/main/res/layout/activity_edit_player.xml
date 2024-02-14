@@ -31,6 +31,13 @@
             android:entries="@array/positions"
             android:prompt="@string/choose_position" />
 
+        <Button
+            android:id="@+id/button_select_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Join Date"
+            android:layout_marginTop="16dp"/>
+
         <ImageView
             android:id="@+id/imageViewPlayer"
             android:layout_width="match_parent"

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -32,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
             FootballPlayer selectedPlayer = (FootballPlayer) parent.getItemAtPosition(position);
             Intent intent = new Intent(MainActivity.this, EditPlayerActivity.class);
             intent.putExtra("playerId", selectedPlayer.id);
+            intent.putExtra("joinDate", selectedPlayer.joinDate);
             startActivity(intent);
         });
     }

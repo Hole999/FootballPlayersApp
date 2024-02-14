@@ -12,11 +12,11 @@ public class FootballPlayer {
     public String position;
     public String club;
     public String image;
+    public String joinDate;
 
     @Override
     public String toString() {
         return nameSurname + " - " + position;
     }
-
 
 }

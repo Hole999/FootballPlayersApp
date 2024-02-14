@@ -1,6 +1,7 @@
 package holovka.footballplayersapp;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -12,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -21,8 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.bumptech.glide.Glide;
+import java.util.Calendar;
 
 public class AddPlayerActivity extends AppCompatActivity {
 
@@ -34,6 +34,8 @@ public class AddPlayerActivity extends AppCompatActivity {
     private ImageView imageViewPlayer;
 
     private Spinner spinnerPosition;
+    private Button buttonSelectDate;
+    private String selectedDate = "";
 
 
     private static final int PERMISSION_REQUEST_STORAGE = 2;
@@ -47,6 +49,8 @@ public class AddPlayerActivity extends AppCompatActivity {
         editTextClub = findViewById(R.id.editTextPlayerClub);
         buttonSelectImage = findViewById(R.id.button_select_image);
         spinnerPosition = findViewById(R.id.spinnerPosition);
+        buttonSelectDate = findViewById(R.id.button_select_date);
+        buttonSelectDate.setOnClickListener(v -> showDatePickerDialog());
 
 
         viewModel = new ViewModelProvider(this).get(FootballPlayerViewModel.class);
@@ -59,6 +63,20 @@ public class AddPlayerActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    private void showDatePickerDialog() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> {
+                    selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                    buttonSelectDate.setText(selectedDate);
+                },
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.show();
     }
 
     private void requestStoragePermission() {
@@ -140,6 +158,7 @@ public class AddPlayerActivity extends AppCompatActivity {
         player.club = club;
         player.position = position;
         player.image = imageUriString;
+        player.joinDate = selectedDate;
 
         viewModel.insert(player);
         finish();
