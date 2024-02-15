@@ -183,8 +183,8 @@ public class AddPlayerActivity extends AppCompatActivity {
         String name = editTextName.getText().toString().trim();
         String club = editTextClub.getText().toString().trim();
         String position = spinnerPosition.getSelectedItem().toString().trim();
-        if (name.isEmpty() || club.isEmpty() || selectedDate == null || selectedDate.equals("Select Join Date")) {
-            Toast.makeText(this, "Player name, club, and join date are required.", Toast.LENGTH_SHORT).show();
+        if (name.isEmpty() || club.isEmpty() || imageUriString.isEmpty() ||selectedDate == null || selectedDate.equals("Select Join Date")) {
+            Toast.makeText(this, "Player name, club, photo and join date are required fields!!.", Toast.LENGTH_SHORT).show();
             return;
         }
 
