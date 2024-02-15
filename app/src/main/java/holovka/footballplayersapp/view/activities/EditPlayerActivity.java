@@ -2,12 +2,15 @@ package holovka.footballplayersapp.view.activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,6 +27,7 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -120,15 +124,27 @@ public class EditPlayerActivity extends AppCompatActivity {
         };
         new DatePickerDialog(EditPlayerActivity.this, dateSetListener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
     }
+    private void openImageSelectionOptions() {
+        openCameraForImageCapture();
+    }
+
 
     private void updatePlayer() {
         currentPlayer.nameSurname = editTextName.getText().toString().trim();
         currentPlayer.club = editTextClub.getText().toString().trim();
-        currentPlayer.position = spinnerPosition.getSelectedItem().toString();
+
+        String selectedPosition = spinnerPosition.getSelectedItem().toString();
+        currentPlayer.position = selectedPosition;
+
+        Log.d("UpdatePlayer", "Selected position: " + selectedPosition);
+
         viewModel.update(currentPlayer);
+
         Toast.makeText(EditPlayerActivity.this, "Player updated successfully", Toast.LENGTH_SHORT).show();
+
         finish();
     }
+
 
     private void deletePlayer() {
         viewModel.delete(currentPlayer);
@@ -145,25 +161,6 @@ public class EditPlayerActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void openImageSelectionOptions() {
-        CharSequence[] options = new CharSequence[]{"Gallery", "Camera"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select Image");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        openGallery();
-                        break;
-                    case 1:
-                        openCameraForImageCapture();
-                        break;
-                }
-            }
-        });
-        builder.show();
-    }
 
     private void openCameraForImageCapture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -202,21 +199,23 @@ public class EditPlayerActivity extends AppCompatActivity {
     }
 
     private Uri saveImageToGallery(Bitmap imageBitmap) {
-        File imageFile = new File(getFilesDir(), "player_image.jpg");
+        ContentResolver resolver = getContentResolver();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, "FootballPlayerImage");
+        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+
+        Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
         try {
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            OutputStream outputStream = resolver.openOutputStream(imageUri);
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-            outputStream.flush();
             outputStream.close();
-            return Uri.fromFile(imageFile);
+            return imageUri;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickImageLauncher.launch(String.valueOf(intent));
-    }
 }

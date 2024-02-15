@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 
 import holovka.footballplayersapp.model.entities.FootballPlayer;
 
-@Database(entities = {FootballPlayer.class}, version = 4, exportSchema = false)
+@Database(entities = {FootballPlayer.class}, version = 5, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FootballPlayerDao footballPlayerDao();
