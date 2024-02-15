@@ -24,13 +24,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
 import holovka.footballplayersapp.R;
 import holovka.footballplayersapp.model.entities.FootballPlayer;
 import holovka.footballplayersapp.viewmodel.FootballPlayerViewModel;
@@ -109,6 +108,8 @@ public class EditPlayerActivity extends AppCompatActivity {
         Glide.with(this).load(Uri.parse(player.image)).into(imageViewPlayer);
         String joinDate = player.joinDate;
         buttonSelectDate.setText(joinDate);
+
+        setSpinnerToPosition(player.position);
     }
 
     private void showDatePickerDialog() {
@@ -124,10 +125,10 @@ public class EditPlayerActivity extends AppCompatActivity {
         };
         new DatePickerDialog(EditPlayerActivity.this, dateSetListener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
     }
+
     private void openImageSelectionOptions() {
         openCameraForImageCapture();
     }
-
 
     private void updatePlayer() {
         currentPlayer.nameSurname = editTextName.getText().toString().trim();
@@ -145,7 +146,6 @@ public class EditPlayerActivity extends AppCompatActivity {
         finish();
     }
 
-
     private void deletePlayer() {
         viewModel.delete(currentPlayer);
         Toast.makeText(EditPlayerActivity.this, "Player deleted successfully", Toast.LENGTH_SHORT).show();
@@ -160,7 +160,6 @@ public class EditPlayerActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     private void openCameraForImageCapture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -198,6 +197,17 @@ public class EditPlayerActivity extends AppCompatActivity {
         }
     }
 
+    private void setSpinnerToPosition(String position) {
+        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinnerPosition.getAdapter();
+        for (int i = 0; i < adapter.getCount(); i++) {
+            if (position.equals(adapter.getItem(i).toString())) {
+                spinnerPosition.setSelection(i);
+                break;
+            }
+        }
+    }
+
+
     private Uri saveImageToGallery(Bitmap imageBitmap) {
         ContentResolver resolver = getContentResolver();
 
@@ -217,5 +227,4 @@ public class EditPlayerActivity extends AppCompatActivity {
             return null;
         }
     }
-
 }
